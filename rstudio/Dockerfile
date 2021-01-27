@@ -54,13 +54,13 @@ RUN apt-get update && \
 
 RUN echo "JAVA_HOME=/usr/lib/jvm/adoptopenjdk-${javaversion}-hotspot-amd64" >> /etc/profile && \
     export JAVA_HOME=/usr/lib/jvm/adoptopenjdk-${javaversion}-hotspot-amd64 && \
-    ln -s /usr/local/bin/Rscript /usr/bin/Rscript && \
-    . /home/rstudio/.bashrc
+    ln -s /usr/local/bin/Rscript /usr/bin/Rscript
+###     . /home/rstudio/.bashrc
 # Install R packages
 RUN echo 'options(repos = c(CRAN = "https://cran.rstudio.com/"))' >> /etc/R/Rprofile.site && \
     Rscript -e "install.packages(c(\"microbenchmark\", \"arrow\", \"rjson\", \"RJSONIO\", \"jsonlite\", \"XML\", \"functional\", \"R.methodsS3\", \"caTools\", \"trelliscopejs\", \"RPostgreSQL\", \"RJDBC\", \"housingData\", \"Lahman\", \"nycflights13\", \"flexdashboard\", \"sparklyr\", \"glmnet\", \"reticulate\", \"tensorflow\"), repos = 'http://cran.rstudio.com')"
-
 RUN chown -R rstudio:rstudio /home/rstudio
+
 # USER root
 
 EXPOSE 8787

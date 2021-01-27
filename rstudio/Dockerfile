@@ -9,7 +9,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 #  ENV JAVA_HOME /usr/lib/jvm/java-${java_version}-openjdk-amd64
 ENV JAVA_HOME /usr/lib/jvm/adoptopenjdk-8-hotspot-amd64
 
-
 RUN apt-get update && \
     apt-get install -y locales && \
     dpkg-reconfigure -f noninteractive locales && \
@@ -19,8 +18,8 @@ RUN apt-get update && \
     locale-gen && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-# Users with other locales should set this in their derivative image
 
+# Users with other locales should set this in their derivative image
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8

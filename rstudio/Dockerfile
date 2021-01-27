@@ -1,4 +1,4 @@
-FROM rocker/verse:3.6.3-ubuntu18.04
+FROM rocker/verse:4.0.3
 MAINTAINER Christopher Grant <chrisgrant.datascience@gmail.com>
 
 ARG pgversion=12
@@ -25,12 +25,16 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 ## OpenJDK, Postgres client, and Arrow
-COPY postgresKey.asc openjdkKey.asc /tmp/
+# COPY postgresKey.asc openjdkKey.asc /tmp/
+COPY openjdkKey.asc /tmp/
+
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl unzip python3 python3-setuptools python3-pip apt-utils wget ca-certificates apt-transport-https dirmngr gnupg software-properties-common  autoconf automake libtool curl make g++ lsb-release unzip tzdata && \
-    apt-key add /tmp/postgresKey.asc && \
+    apt-get install -y --no-install-recommends curl unzip python3-dev python3-setuptools python3-pip apt-utils wget \
+        ca-certificates apt-transport-https dirmngr gnupg software-properties-common  autoconf automake libtool \
+        curl make g++ lsb-release unzip tzdata cython3 cython && \
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-key add /tmp/openjdkKey.asc && \
-    add-apt-repository --yes 'deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main' && \
+    add-apt-repository --yes 'deb http://apt.postgresql.org/pub/repos/apt/ focal-pgdg main' && \
 	add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ && \
 # Update machine and install postgresql and jdk
     apt-get update && \
@@ -43,22 +47,22 @@ RUN apt-get update && \
     apt-get install -y -V ./apache-arrow-archive-keyring-latest-$(lsb_release --codename --short).deb && \
     apt-get update && \
     apt-get install -y -V libprotobuf-dev libprotobuf-c-dev protobuf-compiler protobuf-c-compiler libprotoc-dev \
-                          libarrow-dev libarrow-glib-dev libarrow-dataset-dev libarrow-flight-dev libplasma-dev libplasma-glib-dev \
-                          libgandiva-dev libgandiva-glib-dev libparquet-dev libparquet-glib-dev && \
+        libarrow-dev libarrow-glib-dev libarrow-dataset-dev libarrow-flight-dev libplasma-dev libplasma-glib-dev \
+        libgandiva-dev libgandiva-glib-dev libparquet-dev libparquet-glib-dev && \
     rm ./apache-arrow-archive-keyring-latest-$(lsb_release --codename --short).deb && \
     wget --quiet https://jdbc.postgresql.org/download/postgresql-42.2.14.jar && \
+    python3 -m pip install py4j pyarrow websocket websockets && \
     apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
 
 # ENV LD_LIBRARY_PATH $JAVA_HOME/jre/lib/amd64:$JAVA_HOME/jre/lib/amd64/server
-
 RUN echo "JAVA_HOME=/usr/lib/jvm/adoptopenjdk-${javaversion}-hotspot-amd64" >> /etc/profile && \
     export JAVA_HOME=/usr/lib/jvm/adoptopenjdk-${javaversion}-hotspot-amd64 && \
     ln -s /usr/local/bin/Rscript /usr/bin/Rscript
 ###     . /home/rstudio/.bashrc
 # Install R packages
 RUN echo 'options(repos = c(CRAN = "https://cran.rstudio.com/"))' >> /etc/R/Rprofile.site && \
-    Rscript -e "install.packages(c(\"microbenchmark\", \"arrow\", \"rjson\", \"RJSONIO\", \"jsonlite\", \"XML\", \"functional\", \"R.methodsS3\", \"caTools\", \"trelliscopejs\", \"RPostgreSQL\", \"RJDBC\", \"housingData\", \"Lahman\", \"nycflights13\", \"flexdashboard\", \"sparklyr\", \"glmnet\", \"reticulate\", \"tensorflow\"), repos = 'http://cran.rstudio.com')"
+    Rscript -e "install.packages(c(\"microbenchmark\",\"websocket\" ,\"arrow\", \"rjson\", \"RJSONIO\", \"jsonlite\", \"XML\", \"functional\", \"R.methodsS3\", \"caTools\", \"trelliscopejs\", \"RPostgreSQL\", \"RJDBC\", \"housingData\", \"Lahman\", \"nycflights13\", \"flexdashboard\", \"sparklyr\", \"glmnet\", \"reticulate\", \"tensorflow\"), repos = 'http://cran.rstudio.com')"
 RUN chown -R rstudio:rstudio /home/rstudio
 
 # USER root

@@ -35,37 +35,23 @@ services:
     networks:
       - nodeNetwork
 
-  nodeRED0:
+  nodeRED:
     build: ./nodeRED
     restart: always
     image: node_red_local
-    container_name: nodeRED0
-    hostname: nodeRED0
+    container_name: nodeRED
+    hostname: nodeRED
     ports:
       - "1880:1880"     # NodeRED UI
     volumes:
-      - nodeRED_data_0:/data
-    networks:
-      - nodeNetwork
-
-  nodeRED1:
-    build: ./nodeRED
-    restart: always
-    image: node_red_local
-    container_name: nodeRED1
-    hostname: nodeRED1
-    ports:
-      - "1881:1880"     # NodeRED UI
-    volumes:
-      - nodeRED_data_1:/data
+      - nodeRED_data:/data
     networks:
       - nodeNetwork
 
 volumes:
   rstudio_data_0:
   rstudio_data_1:
-  nodeRED_data_0:
-  nodeRED_data_1:
+  nodeRED_data:
 
 networks:
   nodeNetwork:

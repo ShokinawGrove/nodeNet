@@ -35,91 +35,24 @@ services:
     networks:
       - nodeNetwork
 
-  nodeRED0:
+  nodeRED:
     build: ./nodeRED
     restart: always
     image: node_red_local
-    container_name: nodeRED0
-    hostname: nodeRED0
+    container_name: nodeRED
+    hostname: nodeRED
     ports:
       - "1880:1880"     # NodeRED UI
     volumes:
-      - nodeRED_data_0:/data
+      - nodeRED_data:/data
     networks:
       - nodeNetwork
-
-  nodeRED1:
-    build: ./nodeRED
-    restart: always
-    image: node_red_local
-    container_name: nodeRED1
-    hostname: nodeRED1
-    ports:
-      - "1881:1880"     # NodeRED UI
-    volumes:
-      - nodeRED_data_1:/data
-    networks:
-      - nodeNetwork
-
 
 volumes:
   rstudio_data_0:
   rstudio_data_1:
-  nodeRED_data_0:
-  nodeRED_data_1:
+  nodeRED_data:
 
 networks:
   nodeNetwork:
     driver: bridge
-
-#
-#  postgres:
-#    build: ./postgres
-#    restart: always
-#    image: rspark-postgres
-#    container_name: postgres
-#    hostname: postgres
-#    ports:
-#      - "5432:5432"     # Postgres
-#    volumes:
-#      - rspark_pgdata:/opt/pg-data
-#    networks:
-#      - nodeNetwork
-#
-#  hadoop:
-#    build: ./hadoop
-#    restart: always
-#    image: rspark-hadoop
-#    container_name: hadoop
-#    hostname: hadoop
-#    ports:
-#      - "9000:9000"     # Hadoop
-#      - "50070:50070"   # Hadoop UI
-#    volumes:
-#      - rspark_hadoopdata:/opt/hadoop
-#
-#  hive:
-#    build: ./hive
-#    restart: always
-#    image: rspark-hive
-#    container_name: hive
-#    hostname: hive
-#    ports:
-#      - "10000:10000"
-#      - "9999:9999"     # Hive UI
-#    depends_on:
-#      - hadoop
-#      - postgres
-#
-#
-#  livy:
-#    build: ./livy
-#    restart: always
-#    image: rspark-livy
-#    container_name: livy
-#    hostname: livy
-#    ports:
-#      - "8998:8998"
-#    depends_on:
-#      - hadoop
-#      - hive

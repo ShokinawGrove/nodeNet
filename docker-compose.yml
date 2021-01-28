@@ -3,35 +3,19 @@
 version: '3.5'
 services:
 
-  rstudio0:
+  rstudio:
     build: ./rstudio
     restart: always
     image: rstudio_nodenet
-    container_name: rstudio0
-    hostname: rstudio0
+    container_name: rstudio
+    hostname: rstudio
     environment:
       - PASSWORD=rstudiojh
     ports:
       - "8787:8787"     # RStudio UI
       - "4040:4040"     # Spark Web UI
     volumes:
-      - rstudio_data_0:/home/rstudio
-    networks:
-      - nodeNetwork
-
-  rstudio1:
-    build: ./rstudio
-    restart: always
-    image: rstudio_nodenet
-    container_name: rstudio1
-    hostname: rstudio1
-    environment:
-      - PASSWORD=rstudiojh
-    ports:
-      - "8788:8787"     # RStudio UI
-      - "4041:4040"     # Spark Web UI
-    volumes:
-      - rstudio_data_1:/home/rstudio
+      - rstudio_data:/home/rstudio
     networks:
       - nodeNetwork
 
@@ -49,10 +33,26 @@ services:
       - nodeNetwork
 
 volumes:
-  rstudio_data_0:
-  rstudio_data_1:
+  rstudio_data:
   nodeRED_data:
 
 networks:
   nodeNetwork:
     driver: bridge
+
+
+#  rstudio1:
+#    build: ./rstudio
+#    restart: always
+#    image: rstudio_nodenet
+#    container_name: rstudio1
+#    hostname: rstudio1
+#    environment:
+#      - PASSWORD=rstudiojh
+#    ports:
+#      - "8788:8787"     # RStudio UI
+#      - "4041:4040"     # Spark Web UI
+#    volumes:
+#      - rstudio_data_1:/home/rstudio
+#    networks:
+#      - nodeNetwork

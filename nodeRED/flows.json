@@ -1,0 +1,126 @@
+[
+    {
+        "id": "7549a21b.d7c3bc",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "cb4b6adf.dc4358",
+        "type": "websocket in",
+        "z": "7549a21b.d7c3bc",
+        "name": "",
+        "server": "",
+        "client": "37bf2aea.2dae06",
+        "x": 380,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f23c0e2f.5e3a7",
+        "type": "websocket out",
+        "z": "7549a21b.d7c3bc",
+        "name": "",
+        "server": "c6e9f344.5dc1",
+        "client": "",
+        "x": 800,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "d5227a47.d431c8",
+        "type": "function",
+        "z": "7549a21b.d7c3bc",
+        "name": "",
+        "func": "return {payload: msg};\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 560,
+        "y": 240,
+        "wires": [
+            [
+                "f23c0e2f.5e3a7",
+                "a42a8b40.f84ea8"
+            ]
+        ]
+    },
+    {
+        "id": "a42a8b40.f84ea8",
+        "type": "debug",
+        "z": "7549a21b.d7c3bc",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "346fd4c.e20702c",
+        "type": "websocket in",
+        "z": "7549a21b.d7c3bc",
+        "name": "",
+        "server": "c6e9f344.5dc1",
+        "client": "",
+        "x": 320,
+        "y": 240,
+        "wires": [
+            [
+                "d5227a47.d431c8"
+            ]
+        ]
+    },
+    {
+        "id": "23f947f3.95dac8",
+        "type": "inject",
+        "z": "7549a21b.d7c3bc",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 330,
+        "y": 340,
+        "wires": [
+            [
+                "d5227a47.d431c8"
+            ]
+        ]
+    },
+    {
+        "id": "37bf2aea.2dae06",
+        "type": "websocket-client",
+        "path": "ws://nodeRED:1880/ws/listener",
+        "tls": "",
+        "wholemsg": "false"
+    },
+    {
+        "id": "c6e9f344.5dc1",
+        "type": "websocket-listener",
+        "path": "/ws/listener",
+        "wholemsg": "false"
+    }
+]

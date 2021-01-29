@@ -3,7 +3,7 @@
 
 library(websocket)
 
-ws <- WebSocket$new("ws://nodeRED:1880/ws/receiveMessage")
+ws <- WebSocket$new("ws://nodeRED:1880/ws/listener")
 
 ## Handle WebSocket events
 ws$onMessage(function(event) {
